@@ -57,7 +57,7 @@ export function FlightSearch() {
   };
 
   return (
-    <div style={{ margin: "1rem" }}>
+    <div style={{ backgroundColor: "#063048", color: "white", height: "100%", width: "100%", padding: "1rem 2rem" }}>
       <header>
         <h1>
           <span role="img" aria-label="plane">
@@ -97,7 +97,7 @@ export function FlightSearch() {
           onChange={onNumOfPassengersChange}
           min={1}
         />
-        <Button variant="light" onClick={onSubmit}>
+        <Button variant="filled" onClick={onSubmit} color="red">
           Ara
         </Button>
       </div>
