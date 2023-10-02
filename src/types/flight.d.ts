@@ -17,6 +17,21 @@ type AirportType = {
   };
 };
 
+type SubCategoryType = {
+  brandCode: string;
+  price: {
+    amount: number;
+    currency: string;
+  };
+  order: number;
+  status: "AVAILABLE" | "ERROR";
+  rights: string[];
+};
+
+type FareCategoryType = {
+  subcategories: SubCategoryType[];
+};
+
 type FlightType = {
   originAirport: AirportType;
   destinationAirport: AirportType;
@@ -24,7 +39,7 @@ type FlightType = {
   departureDateTimeDisplay: string;
   flightDuration: string;
   fareCategories: {
-    BUSINESS: null;
-    ECONOMY: null;
+    BUSINESS: FareCategoryType;
+    ECONOMY: FareCategoryType;
   };
 };

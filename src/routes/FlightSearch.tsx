@@ -1,20 +1,14 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { Button, NumberInput, Radio, Select } from "@mantine/core";
-import { CITIES } from "../constants";
+import { CITIES, FARE_CATEGORY_LOCAL_STORAGE_KEY } from "../constants";
 import { DatePickerInput } from "@mantine/dates";
+import { setLocalStorageItem } from "../utils";
+import { useFlightSearchParams } from "../hooks/useFlightSearchParams";
 
 export function FlightSearch() {
-  const [params, setParams] = useSearchParams({
-    origin: "",
-    dest: "",
-    count: "1",
-    category: "ECONOMY",
-  });
+  const { origin, dest, category, numOfPassengers, setParams, params } = useFlightSearchParams();
 
-  const origin = params.get("origin") || "";
-  const dest = params.get("dest") || "";
-  const category = params.get("category") || "";
-  const numOfPassengers = parseInt(params.get("count") || "1") || 1;
+  const navigate = useNavigate();
 
   const onOriginChange = (value: string) => {
     setParams(
@@ -40,6 +34,7 @@ export function FlightSearch() {
     setParams(
       (prev) => {
         prev.set("category", value || "");
+        setLocalStorageItem(FARE_CATEGORY_LOCAL_STORAGE_KEY, value);
         return prev;
       },
       { replace: true }
@@ -54,6 +49,11 @@ export function FlightSearch() {
       },
       { replace: true }
     );
+  };
+
+  const onSubmit = () => {
+    const url = "/flight/list?" + new URLSearchParams(params).toString();
+    navigate(url);
   };
 
   return (
@@ -97,7 +97,9 @@ export function FlightSearch() {
           onChange={onNumOfPassengersChange}
           min={1}
         />
-        <Button variant="light">Ara</Button>
+        <Button variant="light" onClick={onSubmit}>
+          Ara
+        </Button>
       </div>
     </div>
   );
