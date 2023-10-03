@@ -4,8 +4,8 @@ import { getFlights } from "../api/flight";
 import { filterFlights } from "../utils";
 import { Alert, Loader, Modal, Radio } from "@mantine/core";
 import { FlightRow } from "../components/FlightRow";
-import { Link } from "react-router-dom";
-import { BRAND_CODE, FARE_CATEGORY, FareCategoryNameType } from "../constants";
+import { Link, useNavigate } from "react-router-dom";
+import { BRAND_CODE, FARE_CATEGORY, FareCategoryNameType, SUB_CATEGORY_STATUS } from "../constants";
 
 const SORT_TYPE = {
   PRICE: "price",
@@ -14,6 +14,7 @@ const SORT_TYPE = {
 
 export function FlightList() {
   const { origin, dest, category, numOfPassengers, params } = useFlightSearchParams();
+  const navigate = useNavigate();
 
   const [flights, setFlights] = useState<FlightType[]>([]);
   const [loading, setLoading] = useState(false);
@@ -78,6 +79,17 @@ export function FlightList() {
     });
   }, [flights, sortType, category]);
 
+  const onPurchaseButtonClick = async (flight: FlightType, categoryName: FareCategoryNameType, brandCode: string) => {
+    if (
+      flight.fareCategories[categoryName].subcategories.find((x) => x.brandCode === brandCode)?.status ===
+      SUB_CATEGORY_STATUS.AVAILABLE
+    ) {
+      navigate("/flight/purchase?success=true");
+    } else {
+      navigate("/flight/purchase?success=false");
+    }
+  };
+
   return (
     <div>
       <header style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "1rem 2rem" }}>
@@ -113,6 +125,7 @@ export function FlightList() {
             {sortedFlights.map((flight, index) => {
               return (
                 <FlightRow
+                  onPurchaseButtonClick={onPurchaseButtonClick}
                   flight={flight}
                   key={flight.arrivalDateTimeDisplay}
                   onSelect={(categoryTypeName: FareCategoryNameType) => {

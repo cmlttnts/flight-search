@@ -6,10 +6,12 @@ export function FlightRow({
   flight,
   onSelect,
   activeFareCategoryName,
+  onPurchaseButtonClick,
 }: {
   flight: FlightType;
   onSelect: (x: FareCategoryNameType) => void;
   activeFareCategoryName: FareCategoryNameType | null;
+  onPurchaseButtonClick: (flight: FlightType, categoryName: FareCategoryNameType, brandCode: string) => void;
 }) {
   return (
     <>
@@ -56,17 +58,21 @@ export function FlightRow({
           }}
         >
           {flight.fareCategories[activeFareCategoryName!]?.subcategories.map((subCategory) => (
-            <Card style={{ width: "33%", border: "1px solid gray" }}>
+            <Card style={{ width: "33%", border: "1px solid gray" }} key={subCategory.brandCode}>
               <h3 style={{ display: "flex", justifyContent: "space-between" }}>
                 <span>{subCategory.brandCode}</span>
                 <span>{subCategory.price.amount} TRY</span>
               </h3>
               {subCategory.rights.map((x) => (
-                <p key="x" style={{ padding: "0.1rem 0.2rem", backgroundColor: "rgb(235, 235, 235)" }}>
+                <p key={x} style={{ padding: "0.1rem 0.2rem", backgroundColor: "rgb(235, 235, 235)" }}>
                   {x}
                 </p>
               ))}
-              <Button style={{ marginTop: "auto" }} color="#E81932">
+              <Button
+                style={{ marginTop: "auto" }}
+                color="#E81932"
+                onClick={() => onPurchaseButtonClick(flight, activeFareCategoryName!, subCategory.brandCode)}
+              >
                 Uçuş Seç
               </Button>
             </Card>

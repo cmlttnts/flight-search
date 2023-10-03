@@ -7,7 +7,7 @@ type ResponseDataType = {
 const RawData = flightsResp as unknown as ResponseDataType;
 
 // mock
-const API_DELAY = 1000;
+const API_DELAY = 500;
 const SHOULD_FAIL = false;
 
 export async function getFlights() {

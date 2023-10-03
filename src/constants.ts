@@ -20,3 +20,8 @@ export const BRAND_CODE = {
   EXTRA_FLY: "extraFly",
   PRIME_FLY: "primeFly",
 };
+
+export const SUB_CATEGORY_STATUS = {
+  AVAILABLE: "AVAILABLE",
+  ERROR: "ERROR",
+};
